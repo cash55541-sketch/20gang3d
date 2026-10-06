@@ -1,0 +1,51 @@
+20 SQUADS 3D - ONLINE SUNUCU
+============================
+
+Bu klasorde oyunun kendisi (public klasoru) ve online sunucusu (server.js) var.
+Sunucu hem oyunu yayinlar hem de oyunculari birbirine baglar. Tek bir adres olur,
+herkes o adrese girip "Online oyna"ya basar.
+
+NASIL CALISIR
+- "Online oyna"ya basan herkes ayni lobiye girer.
+- Ilk oyuncu girince 60 saniyelik geri sayim baslar.
+- Sure bitince mac baslar: 10 takim x 5 kisi = 50 asker.
+- Gercek oyuncular takimlara dagitilir (her takima sirayla), bos yerlere bot girer.
+- Her takimin lideri o takimdaki ilk oyuncudur; C / V emirleri onun botlarina gider.
+- Son ayakta kalan takim kazanir. 8 saniye sonra yeni lobi acilir.
+- Mac surerken gelenler lobide bekler, bir sonraki maca girer.
+- Mac 10 dakikayi gecerse en cok askeri kalan takim kazanir.
+- Online maclar Sehir haritasinda oynanir.
+
+UCRETSIZ YAYINLAMA (Render.com)
+1) github.com'da ucretsiz hesap ac.
+2) Sag ustte "+" > "New repository". Isim: 20squads-online. "Public" sec, "Create repository".
+3) Acilan sayfada "uploading an existing file" linkine tikla.
+4) Bu klasordeki HER SEYI (package.json, server.js, OKU-BENI.txt ve public klasoru)
+   surukleyip birak. Asagida "Commit changes"e bas.
+   (public klasorunu klasor olarak surukle; icindeki dosyalar public/ altinda gorunmeli.)
+5) render.com'a gir, "Get Started" > GitHub hesabinla giris yap.
+6) "New +" > "Web Service" > 20squads-online deposunu sec.
+7) Ayarlar:
+     Runtime / Language : Node
+     Build Command      : npm install
+     Start Command      : npm start
+     Instance Type      : Free
+   "Create Web Service" (Deploy) bas.
+8) 2-3 dakika sonra ust tarafta adresin cikar:  https://20squads-online.onrender.com
+   Bu adresi arkadaslarina gonder. Herkes "Online oyna"ya bassin.
+
+ONEMLI NOTLAR
+- Render'in ucretsiz planinda sunucu 15 dakika kimse girmezse uyur.
+  Uyuyan sunucuya ilk giren kisi yaklasik 1 dakika bekler, sonra normal calisir.
+- Ucretsiz plan az sayida oyuncu icin yeterlidir. Oyun buyurse Render'in
+  ucretli planina (aylik birkac dolar) gecmek gerekir, bekleme de olmaz.
+- Oyunu guncellemek icin: GitHub'daki dosyalari yenileriyle degistir,
+  Render otomatik olarak yeniden yayinlar.
+- Kendi bilgisayarinda denemek icin (Node.js kuruluysa):
+     npm install
+     npm start
+  sonra tarayicida http://localhost:8080 adresini ac.
+
+AYARLAR (istege bagli, Render'da "Environment" kismindan eklenir)
+- LOBBY_SECONDS : lobi geri sayimi (varsayilan 60)
+- MATCH_SECONDS : en uzun mac suresi (varsayilan 600)

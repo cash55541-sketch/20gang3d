@@ -1,0 +1,9 @@
+{
+  "name": "20-squads-3d-online",
+  "version": "1.0.0",
+  "description": "20 Squads 3D online server: one shared lobby, 10 teams x 5, bots fill empty slots",
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "engines": { "node": ">=18" },
+  "dependencies": { "ws": "^8.18.0" }
+}
