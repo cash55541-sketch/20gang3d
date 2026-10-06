@@ -1,4 +1,4 @@
-20 SQUADS 3D - ONLINE SUNUCU
+20 GANG 3D - ONLINE SUNUCU
 ============================
 
 Bu klasorde oyunun kendisi (public klasoru) ve online sunucusu (server.js) var.
@@ -12,26 +12,26 @@ NASIL CALISIR
 - Gercek oyuncular takimlara dagitilir (her takima sirayla), bos yerlere bot girer.
 - Her takimin lideri o takimdaki ilk oyuncudur; C / V emirleri onun botlarina gider.
 - Son ayakta kalan takim kazanir. 8 saniye sonra yeni lobi acilir.
-- Mac surerken gelenler lobide bekler, bir sonraki maca girer.
+- Mac surerken gelenler bir botun yerine gecip hemen maca girer.
 - Mac 10 dakikayi gecerse en cok askeri kalan takim kazanir.
 - Online maclar Sehir haritasinda oynanir.
 
 UCRETSIZ YAYINLAMA (Render.com)
 1) github.com'da ucretsiz hesap ac.
-2) Sag ustte "+" > "New repository". Isim: 20squads-online. "Public" sec, "Create repository".
+2) Sag ustte "+" > "New repository". Isim: 20gang3d. "Public" sec, "Create repository".
 3) Acilan sayfada "uploading an existing file" linkine tikla.
 4) Bu klasordeki HER SEYI (package.json, server.js, OKU-BENI.txt ve public klasoru)
    surukleyip birak. Asagida "Commit changes"e bas.
    (public klasorunu klasor olarak surukle; icindeki dosyalar public/ altinda gorunmeli.)
 5) render.com'a gir, "Get Started" > GitHub hesabinla giris yap.
-6) "New +" > "Web Service" > 20squads-online deposunu sec.
+6) "New +" > "Web Service" > 20gang3d deposunu sec.
 7) Ayarlar:
      Runtime / Language : Node
      Build Command      : npm install
      Start Command      : npm start
      Instance Type      : Free
    "Create Web Service" (Deploy) bas.
-8) 2-3 dakika sonra ust tarafta adresin cikar:  https://20squads-online.onrender.com
+8) 2-3 dakika sonra ust tarafta adresin cikar:  https://20gang3d.onrender.com
    Bu adresi arkadaslarina gonder. Herkes "Online oyna"ya bassin.
 
 ONEMLI NOTLAR

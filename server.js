@@ -1,4 +1,4 @@
-// 20 Squads 3D — online server
+// 20 Gang 3D — online server
 // Serves the game (public/) and runs one shared room: a lobby with a countdown,
 // then a match of 10 teams x 5 slots. Real players take slots, bots fill the rest.
 // One player in the match ("host") runs the bots; everyone else follows the network.
@@ -41,7 +41,7 @@ const clients = new Map();          // ws -> player
 let nextId = 1;
 let phase = 'lobby';                // lobby | playing | ended
 let countdownEnd = 0, matchEnd = 0;
-let slots = [], hostId = null, alive = [];
+let slots = [], hostId = null, alive = [], lastPos = {};
 
 const send = (ws, o) => { if (ws.readyState === 1) ws.send(typeof o === 'string' ? o : JSON.stringify(o)); };
 const inMatch = () => [...clients.values()].filter(c => c.inMatch);
@@ -87,11 +87,32 @@ function startMatch(){
     c.inMatch = true; c.slot = sl.i;
   });
   hostId = players[0].id;
-  alive = slots.map(() => true);
+  alive = slots.map(() => true); lastPos = {};
   phase = 'playing'; matchEnd = Date.now() + MATCH_SECONDS*1000; countdownEnd = 0;
   for (const c of players) send(c.ws, { t:'start', you: c.id, host: hostId, map: 'sehir', slots });
   broadcastLobby();
   log(`match started: ${players.length} players, ${MAX_PLAYERS - players.length} bots`);
+}
+// someone arrives while a match is running: they take over a living bot right away
+function lateJoin(c){
+  if (phase !== 'playing' || c.inMatch) return false;
+  const humans = new Array(TEAMS).fill(0), bots = new Array(TEAMS).fill(0);
+  for (const sl of slots){ if (sl.owner) humans[sl.team]++; else if (alive[sl.i]) bots[sl.team]++; }
+  let best = -1, score = -1e9;
+  for (let t = 0; t < TEAMS; t++){
+    if (!bots[t]) continue;
+    const sc = (humans[t] ? 0 : 100) - humans[t]*10 + bots[t];    // a team of bots first: you lead it
+    if (sc > score){ score = sc; best = t; }
+  }
+  if (best < 0) return false;
+  const sl = slots.find(x => x.team === best && !x.owner && alive[x.i]);
+  if (!sl) return false;
+  sl.owner = c.id; sl.name = c.name; sl.num = c.num; sl.look = c.look;
+  c.inMatch = true; c.slot = sl.i;
+  send(c.ws, { t:'start', you: c.id, host: hostId, map: 'sehir', slots, late: true, alive, pos: lastPos });
+  toMatch({ t:'joined', i: sl.i, name: c.name, num: c.num, look: c.look }, c);
+  log(`late join: ${c.name} -> slot ${sl.i} (team ${sl.team})`);
+  return true;
 }
 function teamsAlive(){ const t = new Set(); slots.forEach((s, i) => { if (alive[i]) t.add(s.team); }); return t; }
 function endMatch(w){
@@ -129,6 +150,7 @@ setInterval(() => {
       const cnt = new Array(TEAMS).fill(0); slots.forEach((s, i) => { if (alive[i]) cnt[s.team]++; });
       endMatch(cnt.indexOf(Math.max(...cnt)));
     }
+    for (const c of waiting()) if (!lateJoin(c)) break;
     if (now % 5000 < 1000) broadcastLobby();
   }
 }, 1000);
@@ -144,15 +166,19 @@ wss.on('connection', ws => {
     if (!m || typeof m.t !== 'string') return;
     switch (m.t){
       case 'join':
+        if (c.joined) return;
         c.name = cleanName(m.name); c.num = Math.max(1, Math.min(99, m.num | 0 || 10)); c.look = cleanLook(m.look); c.joined = true;
+        if (phase === 'playing' && lateJoin(c)) return;
         send(ws, lobbyState()); broadcastLobby();
         break;
       case 's':     // my own state (+ my shots) -> everyone else in the match
         if (!c.inMatch || !Array.isArray(m.d) || m.d.length > 10) return;
+        lastPos[c.slot] = m.d;
         toMatch({ t:'s', i: c.slot, d: m.d, f: Array.isArray(m.f) ? m.f.slice(0, 12) : undefined }, c);
         break;
       case 'b':     // bot states from the host
         if (!c.inMatch || c.id !== hostId || !Array.isArray(m.d)) return;
+        for (const d of m.d) if (Array.isArray(d) && slots[d[0]]) lastPos[d[0]] = d.slice(1);
         toMatch({ t:'b', d: m.d.slice(0, MAX_PLAYERS), f: Array.isArray(m.f) ? m.f.slice(0, 200) : undefined }, c);
         break;
       case 'hit': { // route damage to whoever owns the victim: its player, or the host for bots
@@ -198,4 +224,4 @@ setInterval(() => { for (const c of clients.values()){ if (c.ws.isAlive === fals
 wss.on('connection', ws => { ws.isAlive = true; ws.on('pong', () => { ws.isAlive = true; }); });
 
 function log(t){ console.log(new Date().toISOString().slice(11, 19), t); }
-server.listen(PORT, () => log(`20 Squads 3D server on :${PORT}  (lobby ${LOBBY_SECONDS}s)`));
+server.listen(PORT, () => log(`20 Gang 3D server on :${PORT}  (lobby ${LOBBY_SECONDS}s)`));

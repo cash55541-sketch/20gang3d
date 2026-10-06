@@ -1,7 +1,7 @@
 {
-  "name": "20-squads-3d-online",
+  "name": "20-gang-3d-online",
   "version": "1.0.0",
-  "description": "20 Squads 3D online server: one shared lobby, 10 teams x 5, bots fill empty slots",
+  "description": "20 Gang 3D online server: one shared lobby, 10 teams x 5, bots fill empty slots",
   "main": "server.js",
   "scripts": { "start": "node server.js" },
   "engines": { "node": ">=18" },
