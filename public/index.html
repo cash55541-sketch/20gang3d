@@ -8,6 +8,8 @@
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', { ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'denied' });
+  try { if (localStorage.getItem('20g-consent') === 'yes') gtag('consent', 'update', { analytics_storage: 'granted' }); } catch(e){}
   gtag('js', new Date());
   gtag('config', 'G-TZMC9PE3G1');
 </script>
@@ -281,6 +283,19 @@
   .lbP.me{border-color:var(--accent);color:var(--accent)}
   .lbP i{width:8px;height:8px;border-radius:50%;background:#7bd36a;flex:none}
   .lbEmpty{grid-column:1/-1;color:var(--dim);font-size:15px}
+  .legal{margin:8px 0 0;font-size:13px;color:var(--dim)}
+  .legal a{color:var(--dim);text-decoration:underline;text-underline-offset:3px}
+  .legal a:hover{color:var(--ink)}
+  #consent{position:fixed;left:16px;right:16px;bottom:16px;z-index:9;max-width:620px;margin:0 auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+    padding:14px 16px;background:rgba(14,16,20,.94);border:1px solid var(--line);color:var(--ink);box-shadow:0 10px 30px rgba(0,0,0,.45)}
+  #consent[hidden]{display:none}
+  #consent p{flex:1 1 300px;margin:0;font-size:15px;line-height:1.4;color:var(--dim)}
+  #consent p b{color:var(--ink)}
+  #consent a{color:var(--accent)}
+  #consent .cBtns{display:flex;gap:8px;margin-left:auto}
+  #consent button{font:inherit;font-size:15px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:9px 16px;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--ink)}
+  #consent button.ok{background:var(--accent);color:#1b1a0e;border-color:var(--accent)}
+  #consent button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 </style>
 
 <canvas id="game"></canvas>
@@ -335,6 +350,7 @@
       <div class="opt"><span>Zorluk</span><div class="seg" data-k="diff"><button data-act="seg" data-v="kolay">Kolay</button><button data-act="seg" data-v="orta">Orta</button><button data-act="seg" data-v="zor">Zor</button></div></div>
     </div>
     <p class="keysLine">WASD yürü · Sağ tık nişan · Sol tık ateş · Boşluk ×2 takla · C / V emir · B dans · Esc duraklat</p>
+    <p class="legal" id="legal" hidden><a href="gizlilik.html" target="_blank" rel="noopener">Gizlilik ve çerezler</a> · <a href="#" id="cookiePrefs">Çerez tercihleri</a></p>
   </div>
 
   <div class="editor" id="editor" hidden>
@@ -372,6 +388,11 @@
     <button class="btn" id="resume">Devam et</button>
     <button class="btn ghost" id="quit">Ana menü</button>
   </div>
+</div>
+
+<div id="consent" role="dialog" aria-label="Çerez tercihi" hidden>
+  <p>Kaç kişinin oynadığını ölçmek için <b>Google Analytics</b> çerezlerini kullanmak istiyoruz. Kabul etmezsen oyun aynı şekilde çalışır. <a href="gizlilik.html" target="_blank" rel="noopener">Ayrıntılar</a></p>
+  <div class="cBtns"><button id="cReject">Reddet</button><button id="cAccept" class="ok">Kabul et</button></div>
 </div>
 
 <div class="ov" id="lobby" hidden>
@@ -2306,6 +2327,7 @@ document.getElementById('tourMenu').addEventListener('click', () => { tour = nul
 function quickCfg(){ return MAP === 'turnuva' ? { teams: 2, size: 20, diff: save.quick.diff, pair: [0, 1] } : { teams: save.quick.teams, size: save.quick.size, diff: save.quick.diff }; }
 function applyCfg(cfg){ activeN = cfg.teams; teamSize = cfg.size; diff = DIFFS[cfg.diff]; activeTeams = cfg.pair ? cfg.pair.slice() : Array.from({length: cfg.teams}, (_, i) => i); }
 function startMatch(cfg){
+  consentEl.hidden = true;
   track('oyun_basladi', { harita: MAP, takim: cfg.teams, zorluk: cfg.diff, turnuva: !!cfg.pair });
   matchT0 = time;
   ensureAudio(); matchCfg = cfg; applyCfg(cfg);
@@ -3428,6 +3450,7 @@ function netLobby(m){
 function escapeHtml(t){ return String(t).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
 function netStart(m){
+  consentEl.hidden = true;
   NET.on = true; NET.inMatch = true; NET.host = m.host === NET.id; NET.orders = {};
   lobbyEl.hidden = true; ui.end.hidden = true; ui.again.hidden = true;
   if (edMode) closeEditor();
@@ -3739,6 +3762,21 @@ function frame(now){
   renderer.render(scene, camera);
 }
 let specYaw = 0, lastXhCheck = -1, regenTick = -1, lodT = 0, planT = 0, matchT0 = 0;
+// cookie consent: only on the website builds, where Google Analytics is loaded (analytics stays off until accepted)
+const consentEl = document.getElementById('consent');
+function setConsent(ok){
+  try { localStorage.setItem('20g-consent', ok ? 'yes' : 'no'); } catch(e){}
+  try { window.gtag('consent', 'update', { analytics_storage: ok ? 'granted' : 'denied' }); } catch(e){}
+  consentEl.hidden = true;
+}
+if (typeof window.gtag === 'function'){
+  document.getElementById('legal').hidden = false;
+  let c = null; try { c = localStorage.getItem('20g-consent'); } catch(e){}
+  if (!c) consentEl.hidden = false;
+  document.getElementById('cAccept').addEventListener('click', () => setConsent(true));
+  document.getElementById('cReject').addEventListener('click', () => setConsent(false));
+  document.getElementById('cookiePrefs').addEventListener('click', e => { e.preventDefault(); consentEl.hidden = false; });
+}
 try { if (sessionStorage.getItem('plato-online')){ sessionStorage.removeItem('plato-online'); setTimeout(netJoin, 300); } } catch(e){}
 requestAnimationFrame(frame);
 })();

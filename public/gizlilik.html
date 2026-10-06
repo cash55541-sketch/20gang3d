@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gizlilik ve Çerez Politikası – 20 Gang 3D</title>
+<meta name="description" content="20 Gang 3D gizlilik ve çerez politikası: hangi verilerin toplandığı, nasıl kullanıldığı ve haklarınız.">
+<link rel="icon" href="favicon.ico">
+<link rel="canonical" href="https://20gang3d.netlify.app/gizlilik.html">
+<style>
+  :root{--bg:#101215;--panel:#171a1f;--ink:#eef1e6;--dim:#a9ada4;--line:rgba(238,241,230,.14);--accent:#ffcf4a}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+  header{display:flex;align-items:center;gap:14px;max-width:780px;margin:0 auto;padding:28px 20px 8px}
+  header img{width:58px;height:58px}
+  header b{font-size:26px;font-style:italic;letter-spacing:.02em}
+  header b i{color:var(--accent)}
+  main{max-width:780px;margin:0 auto;padding:8px 20px 60px}
+  h1{font-size:32px;line-height:1.2;margin:18px 0 4px}
+  .date{color:var(--dim);margin:0 0 28px;font-size:15px}
+  h2{font-size:21px;margin:34px 0 8px;color:var(--accent)}
+  p,li{color:#d9dcd3}
+  ul{padding-left:22px}
+  li{margin:6px 0}
+  a{color:var(--accent)}
+  .box{background:var(--panel);border:1px solid var(--line);padding:16px 18px;margin:18px 0}
+  .btn{display:inline-block;margin-top:6px;padding:10px 18px;background:var(--accent);color:#1b1a0e;font-weight:800;text-decoration:none;letter-spacing:.06em}
+  button.btn{border:0;font:inherit;font-weight:800;cursor:pointer}
+  footer{border-top:1px solid var(--line);max-width:780px;margin:0 auto;padding:18px 20px 40px;color:var(--dim);font-size:14px}
+</style>
+</head>
+<body>
+<header><img src="logo.png" alt="20 Gang 3D logosu"><b>20 GANG <i>3D</i></b></header>
+<main>
+  <h1>Gizlilik ve Çerez Politikası</h1>
+  <p class="date">Son güncelleme: 6 Ekim 2026</p>
+
+  <p>20 Gang 3D, tarayıcıda oynanan ücretsiz bir 3D takım savaşı oyunudur. Bu sayfa, oyunu oynarken hangi bilgilerin işlendiğini, ne için kullanıldığını ve 6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK) kapsamındaki haklarını sade bir dille anlatır.</p>
+
+  <div class="box">
+    <b>Kısaca:</b> Hesap açman gerekmez, e-posta ya da telefon numarası istemeyiz. Kaç kişinin oynadığını ölçmek için Google Analytics kullanırız ve bunun çerezleri yalnızca sen <b>"Kabul et"</b> dersen açılır.
+  </div>
+
+  <h2>1. Hangi bilgiler işleniyor?</h2>
+  <ul>
+    <li><b>Ziyaret istatistikleri (Google Analytics):</b> Sayfa görüntülemeleri; oyunu başlatma, online lobiye girme ve maçı bitirme gibi oyun olayları; tarayıcı ve cihaz türü; yaklaşık konum (ülke/şehir). Bu bilgiler toplu istatistik olarak kullanılır, seni kişi olarak tanımak için kullanılmaz.</li>
+    <li><b>Cihazında kalan bilgiler:</b> Oyuncu adın, karakter ve forma tasarımın, nişangah ayarların ve oyun istatistiklerin tarayıcının hafızasında (localStorage) saklanır. Bu bilgiler bize gönderilmez; tarayıcı verilerini silersen kaybolur.</li>
+    <li><b>Online oyun:</b> "Online oyna"ya bastığında oyuncu adın, karakter görünümün ve maç içindeki hareketlerin oyun sunucusu üzerinden aynı maçtaki diğer oyunculara iletilir. Sunucu bu bilgileri kalıcı olarak kaydetmez; bağlantın kapanınca ya da maç bitince silinir. Online oyunda gerçek adını değil bir takma ad kullanmanı öneririz.</li>
+    <li><b>Teknik kayıtlar:</b> Siteyi ve sunucuyu barındıran şirketler, güvenlik ve işletim amacıyla IP adresi ve erişim zamanı gibi standart sunucu kayıtlarını kısa süreliğine tutabilir.</li>
+  </ul>
+
+  <h2>2. Çerezler</h2>
+  <p>Oyunun çalışması için çerez gerekmez. Google Analytics, ziyaretleri saymak için <code>_ga</code> ile başlayan çerezler kullanır. Bu çerezler <b>sadece onay verdiğinde</b> etkinleşir. Reddedersen Google Analytics çerez yazmaz; oyun aynı şekilde çalışır.</p>
+  <p>Tercihini istediğin zaman değiştirebilirsin:</p>
+  <p><button class="btn" id="yes">Çerezleri kabul et</button> &nbsp; <button class="btn" id="no" style="background:transparent;color:var(--ink);border:1px solid var(--line)">Çerezleri reddet</button> <span id="state" style="color:var(--dim);margin-left:8px"></span></p>
+
+  <h2>3. Hizmet sağlayıcılar ve yurt dışı aktarım</h2>
+  <p>Oyunu yayınlamak için aşağıdaki hizmetleri kullanıyoruz. Bu şirketlerin sunucuları Türkiye dışında (ağırlıklı olarak ABD ve AB) bulunabilir:</p>
+  <ul>
+    <li><b>Netlify</b>: web sitesinin barındırılması</li>
+    <li><b>Render</b>: online oyun sunucusu</li>
+    <li><b>Google Analytics</b>: ziyaret istatistikleri (<a href="https://policies.google.com/privacy?hl=tr" target="_blank" rel="noopener">Google Gizlilik Politikası</a>)</li>
+    <li><b>Google Fonts</b>: oyundaki yazı tipi</li>
+  </ul>
+
+  <h2>4. Saklama süresi</h2>
+  <p>Google Analytics verileri en fazla 14 ay saklanır, sonra otomatik silinir. Online oyun bilgileri maç süresince tutulur. Cihazındaki oyun kayıtları sen silene kadar tarayıcında kalır.</p>
+
+  <h2>5. Hakların (KVKK madde 11)</h2>
+  <p>Kişisel verilerinin işlenip işlenmediğini öğrenme, bilgi talep etme, düzeltilmesini veya silinmesini isteme, yurt içi/yurt dışı aktarıldığı üçüncü kişileri bilme ve kanuna aykırı işlenmesi nedeniyle zarara uğradıysan bunun giderilmesini isteme haklarına sahipsin.</p>
+
+  <h2>6. Çocuklar</h2>
+  <p>Oyun genel kitleye yöneliktir ve hesap açtırmaz. Ebeveynlerin, çocuklarının online oyunda gerçek isim kullanmamasına dikkat etmesini öneririz.</p>
+
+  <h2>7. Değişiklikler ve iletişim</h2>
+  <p>Bu politika güncellenirse yeni tarih bu sayfada yazar. Sorular ve KVKK başvuruları için iletişim: <span id="contact">oyunun geliştiricisi</span>.</p>
+
+  <p><a class="btn" href="./">← Oyuna dön</a></p>
+</main>
+<footer>© 2026 20 Gang 3D</footer>
+<script>
+  const st = document.getElementById('state');
+  function show(){ let c = null; try { c = localStorage.getItem('20g-consent'); } catch(e){} st.textContent = c === 'yes' ? 'Şu an: kabul edildi' : c === 'no' ? 'Şu an: reddedildi' : 'Şu an: seçim yapılmadı'; }
+  function set(v){ try { localStorage.setItem('20g-consent', v); } catch(e){} show(); }
+  document.getElementById('yes').onclick = () => set('yes');
+  document.getElementById('no').onclick = () => set('no');
+  show();
+</script>
+</body>
+</html>
