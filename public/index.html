@@ -3,6 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TZMC9PE3G1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-TZMC9PE3G1');
+</script>
 <title>20 Gang 3D – Ücretsiz Online 3D Takım Savaşı Oyunu | Tarayıcıda Oyna</title>
 <meta name="description" content="20 Gang 3D: 10 takımın aynı anda savaştığı ücretsiz online 3D savaş oyunu. Arkadaşlarınla aynı lobide buluş, takımını yönet, karakterini ve formanı tasarla, son ayakta kalan takım ol. İndirmeden tarayıcıda oyna.">
 <meta name="keywords" content="20 gang 3d, 20gang3d, online savaş oyunu, 3d savaş oyunu, takım savaşı, asker oyunu, nişancı oyunu, ücretsiz oyun, tarayıcı oyunu, multiplayer oyun">
@@ -1962,6 +1970,7 @@ function makeSoldierRaw(team, isPlayer, name, num, look){
 }
 
 let soldiers = [], leaders = [], liveMeshes = [], P = null, matchOver = false, kills = 0, spectate = null;
+function track(name, params){ try { if (typeof window.gtag === 'function') window.gtag('event', name, params || {}); } catch(e){} }
 let MYT = 0;   // my team (always 0 offline; online the server picks it)
 // online state: one server, a lobby with a countdown, 10 teams x 5; one player in the match runs the bots
 const NET = { on:false, ws:null, id:null, host:false, inMatch:false, sol:[], orders:{}, sendT:0, botT:0, fx:[], botFx:[] };
@@ -2297,6 +2306,7 @@ document.getElementById('tourMenu').addEventListener('click', () => { tour = nul
 function quickCfg(){ return MAP === 'turnuva' ? { teams: 2, size: 20, diff: save.quick.diff, pair: [0, 1] } : { teams: save.quick.teams, size: save.quick.size, diff: save.quick.diff }; }
 function applyCfg(cfg){ activeN = cfg.teams; teamSize = cfg.size; diff = DIFFS[cfg.diff]; activeTeams = cfg.pair ? cfg.pair.slice() : Array.from({length: cfg.teams}, (_, i) => i); }
 function startMatch(cfg){
+  track('oyun_basladi', { harita: MAP, takim: cfg.teams, zorluk: cfg.diff, turnuva: !!cfg.pair });
   matchT0 = time;
   ensureAudio(); matchCfg = cfg; applyCfg(cfg);
   setDance(false); pvSpin = false;
@@ -2697,6 +2707,7 @@ function checkWin(){
       ui.endStats.textContent = (w === 0 ? 'Takımın son ayakta kalan takım oldu. ' : 'Kırmızı takım elendi. ')
         + `Leş ${kills} · kafadan ${stats.heads} · isabet %${stats.shots ? Math.round(stats.hits/stats.shots*100) : 0} · takımında hayatta kalan ${alive[0]}` + (P.alive ? ' (sen dahil)' : '');
       if (w === 0) save.stats.wins++; persist();
+      track('mac_bitti', { harita: MAP, kazandi: w === 0, les: kills });
       document.getElementById('endReward').innerHTML = '';
       playing = false;
       if (tour && matchCfg && matchCfg.pair){ tourMatchEnded(w); return; }
@@ -3369,7 +3380,7 @@ function netJoin(){
   }
   const url = netUrl();
   if (!url){ lobbyMsg('Sunucu yok', 'Online mod için oyunu sunucunun adresinden açman gerekiyor.'); return; }
-  ensureAudio();
+  ensureAudio(); track('online_lobi');
   lobbyMsg('Bağlanıyor…', 'Sunucuya bağlanılıyor. Sunucu uykudaysa uyanması 1 dakika kadar sürebilir.');
   let ws;
   try { ws = new WebSocket(url); } catch(e){ lobbyMsg('Bağlanamadı', 'Sunucu adresi hatalı.'); return; }
@@ -3425,6 +3436,7 @@ function netStart(m){
   setDance(false); pvSpin = false;
   spawnAll(m.slots);
   if (m.late) netCatchUp(m);
+  track('online_mac', { gec_katilim: !!m.late, oyuncu: m.slots.filter(sl => sl.owner).length });
   save.stats.matches++; persist();
   matchT0 = time; menuOpen = false; menuEl.hidden = true; document.body.classList.remove('menu'); pauseEl.hidden = true;
   lockPointer(); playing = true;
@@ -3477,6 +3489,7 @@ function netEnd(w){
   ui.endStats.textContent = (w === MYT ? 'Takımın son ayakta kalan takım oldu! ' : '')
     + `Leş ${kills} · kafadan ${stats.heads} · isabet %${stats.shots ? Math.round(stats.hits/stats.shots*100) : 0}. Yeni maçın lobisi birkaç saniye içinde açılıyor.`;
   if (w === MYT) save.stats.wins++; persist();
+  track('online_mac_bitti', { kazandi: w === MYT, les: kills });
   document.getElementById('endReward').innerHTML = '';
   ui.again.hidden = true; ui.end.hidden = false;
   try { document.exitPointerLock && document.exitPointerLock(); } catch(e){}
